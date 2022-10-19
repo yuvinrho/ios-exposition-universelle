@@ -31,8 +31,14 @@ final class MainViewController: UIViewController {
         return exposition
     }
     
+    private func goToKoreanItemsVC() {
+        let storyboard = UIStoryboard(name: "KoreanItems", bundle: Bundle.main)
+        let vc = storyboard.instantiateViewController(withIdentifier: "KoreanItemsViewController")
+        self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
     @objc private func touchUpkoreanItemsViewButton() {
-        print("touchUp button")
+        goToKoreanItemsVC()
     }
     
     private func configureView() {
