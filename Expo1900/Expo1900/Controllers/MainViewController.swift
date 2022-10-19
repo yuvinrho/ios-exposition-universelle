@@ -31,6 +31,10 @@ final class MainViewController: UIViewController {
         return exposition
     }
     
+    @objc private func touchUpkoreanItemsViewButton() {
+        print("touchUp button")
+    }
+    
     private func configureView() {
         let koreanTitleLabel: UILabel = {
             let label = UILabel()
@@ -106,6 +110,7 @@ final class MainViewController: UIViewController {
             let button = UIButton()
             button.setTitle("🇰🇷 한국의 출품작 보러가기 🇰🇷", for: .normal)
             button.setTitleColor(.systemBlue, for: .normal)
+            button.addTarget(self, action: #selector(touchUpkoreanItemsViewButton), for: .touchUpInside)
             
             return button
         }()
