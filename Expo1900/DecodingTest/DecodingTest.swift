@@ -14,4 +14,14 @@ class DecodingTest: XCTestCase {
         let exposition = try? decoder.decode(Exposition.self, from: expoAsset.data)
         XCTAssertNotNil(exposition)
     }
+    
+    func test_디코딩했을때_items_잘받아오는지() throws {
+        
+        let decoder = JSONDecoder()
+        
+        guard let dataAsset: NSDataAsset = NSDataAsset(name: "items") else { return }
+        
+        let items = try? decoder.decode([Item].self, from: dataAsset.data)
+        XCTAssertNotNil(items)
+    }
 }

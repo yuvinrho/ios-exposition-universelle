@@ -15,7 +15,7 @@ final class MainViewController: UIViewController {
         
         return formatter
     }()
-    private var exposition: Exposition? = nil
+    private var exposition: Exposition?
     
     override func viewDidLoad() {
         super.viewDidLoad()
