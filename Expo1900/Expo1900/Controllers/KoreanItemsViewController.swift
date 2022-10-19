@@ -49,6 +49,9 @@ extension KoreanItemsViewController: UITableViewDataSource {
 
 extension KoreanItemsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("\(indexPath.row) cell selected.")
+        let storyboard = UIStoryboard(name: "ItemInfo", bundle: Bundle.main)
+        let vc = storyboard.instantiateViewController(withIdentifier: "ItemInfoViewController") as! ItemInfoViewController
+        vc.item = items?[indexPath.row]
+        self.navigationController?.pushViewController(vc, animated: true)
     }
 }
