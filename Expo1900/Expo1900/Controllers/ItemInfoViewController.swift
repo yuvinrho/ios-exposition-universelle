@@ -21,7 +21,6 @@ final class ItemInfoViewController: UIViewController {
     private func configureView() {
         itemImage.image = UIImage(named: item?.imageName ?? "")
         itemImage.contentMode = .scaleAspectFit
-        itemImage.clipsToBounds = true
         itemDescriptionLabel.text = item?.desc
     }
 }
