@@ -1,4 +1,4 @@
-//  Created by 노유빈 on 2022/10/19.
+//  Created by rhovin on 2022/10/19.
 
 import UIKit
 
@@ -37,7 +37,7 @@ extension KoreanItemsViewController: UITableViewDataSource {
         let cell: UITableViewCell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier,
                                                                   for: indexPath)
         cell.accessoryType = .disclosureIndicator
-        cell.imageView?.image = UIImage(named: items?[indexPath.row].imageName ?? "flag")
+        cell.imageView?.image = UIImage(named: items?[indexPath.row].imageName ?? "")
         cell.textLabel?.text = items?[indexPath.row].name
         cell.textLabel?.font = UIFont.preferredFont(forTextStyle: .title1)
         cell.detailTextLabel?.text = items?[indexPath.row].shortDesc

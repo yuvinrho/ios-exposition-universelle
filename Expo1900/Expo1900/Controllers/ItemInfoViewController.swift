@@ -1,9 +1,4 @@
-//
-//  ItemViewController.swift
-//  Expo1900
-//
-//  Created by 노유빈 on 2022/10/19.
-//
+//  Created by rhovin on 2022/10/19.
 
 import UIKit
 
@@ -24,7 +19,7 @@ final class ItemInfoViewController: UIViewController {
     }
     
     private func configureView() {
-        itemImage.image = UIImage(named: item?.imageName ?? "flag")
+        itemImage.image = UIImage(named: item?.imageName ?? "")
         itemImage.contentMode = .scaleAspectFit
         itemImage.clipsToBounds = true
         itemDescriptionLabel.text = item?.desc
