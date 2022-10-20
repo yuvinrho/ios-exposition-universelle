@@ -24,6 +24,10 @@ final class MainViewController: UIViewController {
         configureView()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        self.navigationController?.isNavigationBarHidden = true
+    }
+    
     private func decodeExposition(_ file: String) -> Exposition? {
         guard let expositionAsset: NSDataAsset = NSDataAsset(name: file) else { return nil }
         let exposition = try? jsonDecoder.decode(Exposition.self, from: expositionAsset.data)
@@ -32,6 +36,7 @@ final class MainViewController: UIViewController {
     }
     
     private func goToKoreanItemsVC() {
+        self.navigationController?.isNavigationBarHidden = false
         let storyboard = UIStoryboard(name: "KoreanItems", bundle: Bundle.main)
         let vc = storyboard.instantiateViewController(withIdentifier: "KoreanItemsViewController")
         self.navigationController?.pushViewController(vc, animated: true)
