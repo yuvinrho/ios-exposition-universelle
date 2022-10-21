@@ -46,24 +46,25 @@ final class MainViewController: UIViewController {
         goToKoreanItemsVC()
     }
     
+    private func makeLabel(text: String?, font: UIFont, numberOfLines: Int = 1) -> UILabel {
+        let label = UILabel()
+        label.text = text
+        label.font = font
+        label.numberOfLines = numberOfLines
+        
+        return label
+    }
+    
     private func configureView() {
-        let koreanTitleLabel: UILabel = {
-            let label = UILabel()
-            label.text = exposition?.koreanTitle
-            label.font = UIFont.preferredFont(forTextStyle: .title1)
-            
-            return label
-        }()
+        let koreanTitleText = exposition?.koreanTitle
+        let koreanTitleLabel: UILabel = makeLabel(text: koreanTitleText,
+                                                  font: UIFont.preferredFont(forTextStyle: .title1))
         
         mainStackView.addArrangedSubview(koreanTitleLabel)
         
-        let englishTitleLabel: UILabel = {
-            let label = UILabel()
-            label.text = exposition?.englishTitle
-            label.font = UIFont.preferredFont(forTextStyle: .title1)
-            
-            return label
-        }()
+        let englishTitleText = exposition?.englishTitle
+        let englishTitleLabel: UILabel = makeLabel(text: englishTitleText,
+                                                   font: .preferredFont(forTextStyle: .title1))
         
         mainStackView.addArrangedSubview(englishTitleLabel)
         
@@ -76,44 +77,28 @@ final class MainViewController: UIViewController {
         
         mainStackView.addArrangedSubview(posterImageView)
         
-        let visitorsLabel: UILabel = {
-            let label = UILabel()
-            label.text = "방문객 : \(numberFormatter.string(for: exposition?.visitors) ?? "")"
-            label.font = UIFont.preferredFont(forTextStyle: .title3)
-            
-            return label
-        }()
+        let visitorLabelText = "방문객 : \(numberFormatter.string(for: exposition?.visitors) ?? "")"
+        let visitorsLabel: UILabel = makeLabel(text: visitorLabelText,
+                                               font: UIFont.preferredFont(forTextStyle: .title3))
         
         mainStackView.addArrangedSubview(visitorsLabel)
         
-        let locationLabel: UILabel = {
-            let label = UILabel()
-            label.text = "개최지 : \(exposition?.location ?? "")"
-            label.font = UIFont.preferredFont(forTextStyle: .title3)
-            
-            return label
-        }()
+        let locationLabelText = "개최지 : \(exposition?.location ?? "")"
+        let locationLabel: UILabel = makeLabel(text: locationLabelText,
+                                               font: UIFont.preferredFont(forTextStyle: .title3))
         
         mainStackView.addArrangedSubview(locationLabel)
         
-        let durationLabel: UILabel = {
-            let label = UILabel()
-            label.text = "개최 기간 : \(exposition?.duration ?? "")"
-            label.font = UIFont.preferredFont(forTextStyle: .title3)
-            
-            return label
-        }()
+        let durationLabelText = "개최 기간 : \(exposition?.duration ?? "")"
+        let durationLabel: UILabel = makeLabel(text: durationLabelText,
+                                               font: UIFont.preferredFont(forTextStyle: .title3))
         
         mainStackView.addArrangedSubview(durationLabel)
         
-        let descriptionLabel: UILabel = {
-            let label = UILabel()
-            label.text = exposition?.description
-            label.font = UIFont.preferredFont(forTextStyle: .body)
-            label.numberOfLines = 0
-            
-            return label
-        }()
+        let descriptionLabelText = exposition?.description
+        let descriptionLabel: UILabel = makeLabel(text: descriptionLabelText,
+                                                  font: UIFont.preferredFont(forTextStyle: .body),
+                                                  numberOfLines: 0)
         
         mainStackView.addArrangedSubview(descriptionLabel)
         
