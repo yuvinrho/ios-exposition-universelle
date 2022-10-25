@@ -7,20 +7,22 @@
 import UIKit
 
 final class MainViewController: UIViewController {
-    @IBOutlet private weak var mainStackView: UIStackView!
-    private let jsonDecoder = JSONDecoder()
-    private let numberFormatter: NumberFormatter = {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        
-        return formatter
-    }()
+    @IBOutlet private weak var stackView: UIStackView!
+    
+    private weak var koreanTitleLabel: UILabel!
+    private weak var englishTitleLabel: UILabel!
+    private weak var locationLabel: UILabel!
+    private weak var durationLabel: UILabel!
+    private weak var visitorsLabel: UILabel!
+    private weak var descriptionLabel: UILabel!
+    private weak var posterImageView: UIImageView!
+    private weak var koreanItemsViewButton: UIButton!
     private var exposition: Exposition?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        exposition = decodeExposition("exposition_universelle_1900")
+        exposition = Converter.decode("exposition_universelle_1900")
         configureView()
     }
     
@@ -28,89 +30,64 @@ final class MainViewController: UIViewController {
         self.navigationController?.isNavigationBarHidden = true
     }
     
-    private func decodeExposition(_ file: String) -> Exposition? {
-        guard let expositionAsset: NSDataAsset = NSDataAsset(name: file) else { return nil }
-        let exposition = try? jsonDecoder.decode(Exposition.self, from: expositionAsset.data)
-        
-        return exposition
-    }
-    
-    private func goToKoreanItemsVC() {
-        self.navigationController?.isNavigationBarHidden = false
-        let storyboard = UIStoryboard(name: "KoreanItems", bundle: Bundle.main)
-        let vc = storyboard.instantiateViewController(withIdentifier: "KoreanItemsViewController")
-        self.navigationController?.pushViewController(vc, animated: true)
-    }
-    
-    @objc private func touchUpkoreanItemsViewButton() {
-        goToKoreanItemsVC()
-    }
-    
-    private func makeLabel(text: String?, font: UIFont, numberOfLines: Int = 1) -> UILabel {
+    private func configureLabel(text: String?, textStyle: UIFont.TextStyle, numberOfLines: Int = 1) -> UILabel {
         let label = UILabel()
         label.text = text
-        label.font = font
+        label.font = UIFont.preferredFont(forTextStyle: textStyle)
         label.numberOfLines = numberOfLines
         
         return label
     }
     
-    private func configureView() {
-        let koreanTitleText = exposition?.koreanTitle
-        let koreanTitleLabel: UILabel = makeLabel(text: koreanTitleText,
-                                                  font: UIFont.preferredFont(forTextStyle: .title1))
-        
-        mainStackView.addArrangedSubview(koreanTitleLabel)
-        
-        let englishTitleText = exposition?.englishTitle
-        let englishTitleLabel: UILabel = makeLabel(text: englishTitleText,
-                                                   font: .preferredFont(forTextStyle: .title1))
-        
-        mainStackView.addArrangedSubview(englishTitleLabel)
-        
-        let posterImageView: UIImageView = {
-            let imageView = UIImageView()
-            imageView.image = UIImage(named: "poster")
-            
-            return imageView
-        }()
-        
-        mainStackView.addArrangedSubview(posterImageView)
-        
-        let visitorLabelText = "방문객 : \(numberFormatter.string(for: exposition?.visitors) ?? "")"
-        let visitorsLabel: UILabel = makeLabel(text: visitorLabelText,
-                                               font: UIFont.preferredFont(forTextStyle: .title3))
-        
-        mainStackView.addArrangedSubview(visitorsLabel)
-        
-        let locationLabelText = "개최지 : \(exposition?.location ?? "")"
-        let locationLabel: UILabel = makeLabel(text: locationLabelText,
-                                               font: UIFont.preferredFont(forTextStyle: .title3))
-        
-        mainStackView.addArrangedSubview(locationLabel)
-        
-        let durationLabelText = "개최 기간 : \(exposition?.duration ?? "")"
-        let durationLabel: UILabel = makeLabel(text: durationLabelText,
-                                               font: UIFont.preferredFont(forTextStyle: .title3))
-        
-        mainStackView.addArrangedSubview(durationLabel)
-        
-        let descriptionLabelText = exposition?.description
-        let descriptionLabel: UILabel = makeLabel(text: descriptionLabelText,
-                                                  font: UIFont.preferredFont(forTextStyle: .body),
-                                                  numberOfLines: 0)
-        
-        mainStackView.addArrangedSubview(descriptionLabel)
-        
-        let koreanItemsViewButton: UIButton = {
+    private func configureLabels() {
+        koreanTitleLabel = configureLabel(text:exposition?.koreanTitle,
+                                          textStyle: .title1)
+        englishTitleLabel = configureLabel(text: exposition?.englishTitle,
+                                           textStyle: .title1)
+        visitorsLabel = configureLabel(text: "방문객 : \(Converter.numberFormatter.string(for: exposition?.visitors) ?? "")",
+                                       textStyle: .title3)
+        locationLabel = configureLabel(text: "개최지 : \(exposition?.location ?? "")",
+                                       textStyle: .title3)
+        durationLabel = configureLabel(text: "개최 기간 : \(exposition?.duration ?? "")",
+                                       textStyle: .title3)
+        descriptionLabel = configureLabel(text: exposition?.description,
+                                          textStyle: .body,
+                                          numberOfLines: 0)
+    }
+    
+    private func configureButton() {
+        koreanItemsViewButton = {
             let button = UIButton()
+            let action = UIAction { _ in
+                self.navigationController?.isNavigationBarHidden = false
+                self.performSegue(withIdentifier: "koreanItemsSegue", sender: self)
+            }
             button.setTitle("🇰🇷 한국의 출품작 보러가기 🇰🇷", for: .normal)
             button.setTitleColor(.systemBlue, for: .normal)
-            button.addTarget(self, action: #selector(touchUpkoreanItemsViewButton), for: .touchUpInside)
+            button.addAction(action, for: .touchUpInside)
             
             return button
         }()
+    }
+    
+    func addSubviews() {
+        stackView.addArrangedSubview(koreanTitleLabel)
+        stackView.addArrangedSubview(englishTitleLabel)
         
-        mainStackView.addArrangedSubview(koreanItemsViewButton)
+        stackView.addArrangedSubview(posterImageView)
+        
+        stackView.addArrangedSubview(visitorsLabel)
+        stackView.addArrangedSubview(locationLabel)
+        stackView.addArrangedSubview(durationLabel)
+        stackView.addArrangedSubview(descriptionLabel)
+        
+        stackView.addArrangedSubview(koreanItemsViewButton)
+    }
+    
+    private func configureView() {
+        configureLabels()
+        posterImageView.image = UIImage(named: "poster")
+        configureButton()
+        addSubviews()
     }
 }
